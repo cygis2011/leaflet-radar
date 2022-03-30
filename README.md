@@ -11,6 +11,7 @@ Via NPM:
 ## Using the plugin
  
 ### Importing
+https://github.com/cygis2011/leaflet-radar/blob/main/radar.gif
 Using with ES6 imports
 ```javascript
     import  Radar  from 'leaflet-radar';
