@@ -1,29 +1,5 @@
 
-/**定义扇形 */
-var Sector = L.Circle.extend({
-    options: {
-        renderer: new Renderer()
-    },
-    initialize: function (latlng, options, legacyOptions) {
-        if (options) {
-            this._startAngle = options.startAngle - 90
-            this._endAngle = options.endAngle - 90
-            L.Circle.prototype.initialize.call(this, latlng, options, legacyOptions);
-        }
-    },
-    _updatePath: function () {
-        if ((this._endAngle - this._startAngle) % 360 == 0) {
-            this._renderer._updateCircle(this);
-        } else {
-            this._renderer._updateSector(this);
-        }
-    },
-    setStyle: function (options) {
-        this._startAngle = options.startAngle - 90
-        this._endAngle = options.endAngle - 90
-        L.Circle.prototype.setStyle.call(this, options);
-    }
-})
+
 /**Renderer */
 var Renderer = L.Canvas.extend({
     options: {
@@ -156,7 +132,6 @@ var Renderer = L.Canvas.extend({
             ctx.restore();
         }
         var gradient = ctx.createRadialGradient(p.x, p.y / s, 0, p.x, p.y / s, r);//ctx.createLinearGradient(0, 0, 1200, 600);
-
         // 线性渐变
         gradient.addColorStop(0, 'rgb(0,0,255)');
         gradient.addColorStop(1, 'rgb(255,255,0)');
@@ -211,9 +186,7 @@ var Renderer = L.Canvas.extend({
                     }
                 }
             }
-
             this._textList.push(bounds);
-
             // ctx.strokeStyle = "white";
             // ctx.strokeText(layer.options.text, p.x + offsetX, p.y
             //         + offsetY);
@@ -283,16 +256,12 @@ var Renderer = L.Canvas.extend({
         }
     },
     _getCenter: function (points) {
-
         var i, halfDist, segDist, dist, p1, p2, ratio, len = points.length;
-
         if (!len) {
             return null;
         }
-
         // polyline centroid algorithm; only uses the first ring if
         // there are multiple
-
         for (i = 0, halfDist = 0; i < len - 1; i++) {
             halfDist += points[i].distanceTo(points[i + 1]) / 2;
         }
@@ -320,6 +289,31 @@ var Renderer = L.Canvas.extend({
     },
 
 });
+/**定义扇形 */
+var Sector = L.Circle.extend({
+    options: {
+        renderer: new Renderer()
+    },
+    initialize: function (latlng, options, legacyOptions) {
+        if (options) {
+            this._startAngle = options.startAngle - 90
+            this._endAngle = options.endAngle - 90
+            L.Circle.prototype.initialize.call(this, latlng, options, legacyOptions);
+        }
+    },
+    _updatePath: function () {
+        if ((this._endAngle - this._startAngle) % 360 == 0) {
+            this._renderer._updateCircle(this);
+        } else {
+            this._renderer._updateSector(this);
+        }
+    },
+    setStyle: function (options) {
+        this._startAngle = options.startAngle - 90
+        this._endAngle = options.endAngle - 90
+        L.Circle.prototype.setStyle.call(this, options);
+    }
+})
 /**定义雷达图层 */
 L.Radar = L.LayerGroup.extend({
     options: {
@@ -371,13 +365,10 @@ L.Radar = L.LayerGroup.extend({
         }
         if (this.animationRadarArea == null) {
             this.animationRadarArea = this.creatSector(this.getSectorStyle())
-            // this.animationRadarArea2 = this.creatSector(this.getSectorStyle())
         } else {
             var style = this.getSectorOptions(this.getSectorStyle())
             this.animationRadarArea.setStyle(style)
             this.animationRadarArea.setLatLng(L.latLng(this.center))
-            // this.animationRadarArea2.setStyle(style)
-            // this.animationRadarArea2.setLatLng(L.latLng(this.center))
         }
     },
     getSectorStyle() {

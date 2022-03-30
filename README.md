@@ -13,7 +13,7 @@ Via NPM:
 ### Importing
 Using with ES6 imports
 ```javascript
-    import { Radar } from 'leaflet-radar';
+    import  Radar  from 'leaflet-radar';
     
     // Usethe constructor...
     let radar = new Radar({
